@@ -1,0 +1,12 @@
+# Ignore everything
+/*
+
+# Not these files
+!/.gitattributes
+!/.gitignore
+!/index.php
+!/README.md
+
+# Not these directories
+!/css
+!/php
