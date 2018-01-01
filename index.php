@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>Visitors Counter</title>
     <link rel="stylesheet" href="./css/styles.css">
 </head>
