@@ -4,9 +4,9 @@ require_once "JsonWrapper.php";
 
 final class Counter
 {
-    public $totalCount = 0;
-    public $dailyCount = 0;
-    public $nowCount = 0;
+    private $totalCount = 0;
+    private $dailyCount = 0;
+    private $nowCount = 0;
 
     private $fileName = null;
     private $fileContents = null;
@@ -30,6 +30,21 @@ final class Counter
         $this->processNow();
 
         file_put_contents($this->fileName, JsonWrapper::encode($this->fileContents));
+    }
+
+    public function getTotalCount()
+    {
+        return $this->totalCount;
+    }
+
+    public function getDailyCount()
+    {
+        return $this->dailyCount;
+    }
+
+    public function getNowCount()
+    {
+        return $this->nowCount;
     }
 
     private function processTotal()
