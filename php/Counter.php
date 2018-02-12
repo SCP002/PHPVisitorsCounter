@@ -1,6 +1,7 @@
 <?php
 
 require_once "JsonWrapper.php";
+require_once "Utils.php";
 
 class Counter
 {
@@ -74,7 +75,7 @@ class Counter
 
     private function processNow()
     {
-        $clientIP = $_SERVER["REMOTE_ADDR"];
+        $clientIP = Utils::getClientIP();
         $ipExist = false;
         $currentTime = time();
         $expires = $currentTime + $this->expireTime;
