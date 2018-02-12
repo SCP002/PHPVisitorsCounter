@@ -20,7 +20,7 @@ class Debugger
         echo "<script>window.console.log(\"$message\");</script>";
     }
 
-    public static function debugToFile($message, $fileName = "php-debug.log", $timestamp = false, $append = true)
+    public static function debugToFile($message, $fileName = "./php-debug.log", $timestamp = false, $append = true)
     {
         $message = print_r($message, true) . PHP_EOL;
         $flags = null;
