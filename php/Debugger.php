@@ -3,7 +3,7 @@
 /**
  * Custom debugger to output messages to the browser console or specified file
  */
-final class Debugger
+class Debugger
 {
     public static function debug($message, $timestamp = false)
     {
@@ -15,7 +15,9 @@ final class Debugger
             $message = time() . ": " . $message;
         }
 
-        echo "<script>console.log(\"$message\");</script>";
+        $message = "PHP: " . $message;
+
+        echo "<script>window.console.log(\"$message\");</script>";
     }
 
     public static function debugToFile($message, $fileName = "php-debug.log", $timestamp = false, $append = true)

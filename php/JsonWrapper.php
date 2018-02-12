@@ -5,33 +5,38 @@ require_once "lib/JSON.php";
 /**
  * Workaround for json_decode and json_encode in php < 5.2
  */
-final class JsonWrapper
+class JsonWrapper
 {
-    public static function decode($content, $assoc = false)
-    {
-        if ($assoc) {
-            $servicesJson = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
-        } else {
-            $servicesJson = new Services_JSON();
-        }
+    private $servicesJsonStd = null;
+    private $servicesJsonAssoc = null;
 
-        return $servicesJson->decode($content);
+    public function __construct()
+    {
+        $this->servicesJsonStd = new Services_JSON();
+        $this->servicesJsonAssoc = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
     }
 
-    public static function encode($content, $decorate = true)
+    public function decode($content, $assoc = false)
     {
-        $servicesJson = new Services_JSON();
+        if ($assoc) {
+            return $this->servicesJsonAssoc->decode($content);
+        } else {
+            return $this->servicesJsonStd->decode($content);
+        }
+    }
 
-        $result = $servicesJson->encode($content);
+    public function encode($content, $decorate = true)
+    {
+        $result = $this->servicesJsonStd->encode($content);
 
         if ($decorate) {
-            $result = self::decorate($result);
+            $result = $this->decorate($result);
         }
 
         return $result;
     }
 
-    private static function decorate($json)
+    private function decorate($json)
     {
         $result = '';
         $pos = 0;

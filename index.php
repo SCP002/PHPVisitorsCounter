@@ -16,9 +16,9 @@ $counter = new Counter("./visitors-counter.json", 60 * 3, "Europe/Moscow");
 
 // Write messages to the browser javascript console for debugging purpose.
 include_once "./php/Debugger.php";
-Debugger::debug("PHP: Now: " . $counter->getNowCount());
-Debugger::debug("PHP: Daily: " . $counter->getDailyCount());
-Debugger::debug("PHP: Total: " . $counter->getTotalCount());
+Debugger::debug("Now: " . $counter->getNowCount(), true);
+Debugger::debug("Daily: " . $counter->getDailyCount(), true);
+Debugger::debug("Total: " . $counter->getTotalCount(), true);
 ?>
 
 <div class="counter">

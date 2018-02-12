@@ -2,8 +2,10 @@
 
 require_once "JsonWrapper.php";
 
-final class Counter
+class Counter
 {
+    private $jsonWrapper = null;
+
     private $totalCount = 0;
     private $dailyCount = 0;
     private $nowCount = 0;
@@ -14,6 +16,8 @@ final class Counter
 
     public function __construct($fileName, $expireTime, $timezoneIdentifier)
     {
+        $this->jsonWrapper = new JsonWrapper();
+
         $this->fileName = $fileName;
         $this->expireTime = $expireTime;
 
@@ -23,13 +27,13 @@ final class Counter
             $this->createFile();
         }
 
-        $this->fileContents = JsonWrapper::decode(file_get_contents($this->fileName), true);
+        $this->fileContents = $this->jsonWrapper->decode(file_get_contents($this->fileName), true);
 
         $this->processTotal();
         $this->processDaily();
         $this->processNow();
 
-        file_put_contents($this->fileName, JsonWrapper::encode($this->fileContents));
+        file_put_contents($this->fileName, $this->jsonWrapper->encode($this->fileContents));
     }
 
     public function getTotalCount()
@@ -116,6 +120,6 @@ final class Counter
             )
         );
 
-        file_put_contents($this->fileName, JsonWrapper::encode($data));
+        file_put_contents($this->fileName, $this->jsonWrapper->encode($data));
     }
 }
