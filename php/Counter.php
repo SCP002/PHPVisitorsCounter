@@ -5,24 +5,31 @@ require_once "Utils.php";
 
 class Counter
 {
+    private $totalCount = null;
+    private $dailyCount = null;
+    private $nowCount = null;
+
     private $jsonWrapper = null;
+    private $clientIp = null;
 
-    private $totalCount = 0;
-    private $dailyCount = 0;
-    private $nowCount = 0;
-
+    private $clientId = null;
+    private $sessionId = null;
+    private $expireTime = null;
     private $fileName = null;
+
     private $fileContents = null;
-    private $expireTime = 0;
 
-    public function __construct($fileName, $expireTime, $timezoneIdentifier)
+    public function __construct($clientId, $sessionId, $expireTime, $fileName, $timezoneIdentifier)
     {
-        $this->jsonWrapper = new JsonWrapper();
-
-        $this->fileName = $fileName;
-        $this->expireTime = $expireTime;
-
         date_default_timezone_set($timezoneIdentifier);
+
+        $this->jsonWrapper = new JsonWrapper();
+        $this->clientIp = Utils::getClientIpAddress();
+
+        $this->clientId = $clientId;
+        $this->sessionId = $sessionId;
+        $this->expireTime = $expireTime;
+        $this->fileName = $fileName;
 
         if (!file_exists($this->fileName)) {
             $this->createFile();
@@ -30,8 +37,7 @@ class Counter
 
         $this->fileContents = $this->jsonWrapper->decode(file_get_contents($this->fileName), true);
 
-        $this->processTotal();
-        $this->processDaily();
+        $this->processDailyAndTotal();
         $this->processNow();
 
         file_put_contents($this->fileName, $this->jsonWrapper->encode($this->fileContents));
@@ -52,53 +58,67 @@ class Counter
         return $this->nowCount;
     }
 
-    private function processTotal()
+    private function processDailyAndTotal()
     {
-        $this->fileContents["total"]["count"]++;
-
-        $this->totalCount = $this->fileContents["total"]["count"];
-    }
-
-    private function processDaily()
-    {
+        $sessionIdExist = false;
         $currentDay = intval(date("d"));
+
+        $currentUserData = array(
+            "sessionId" => $this->sessionId,
+            "clientIp" => $this->clientIp
+        );
 
         if ($this->fileContents["daily"]["day"] != $currentDay) {
             $this->fileContents["daily"]["day"] = $currentDay;
-            $this->fileContents["daily"]["count"] = 0;
+
+            $this->fileContents["daily"]["users"] = array();
         } else {
-            $this->fileContents["daily"]["count"]++;
+            foreach ($this->fileContents["daily"]["users"] as $user => $data) {
+                if ($data["sessionId"] == $this->sessionId) {
+                    $sessionIdExist = true;
+                }
+            }
         }
 
-        $this->dailyCount = $this->fileContents["daily"]["count"];
+        if (!$sessionIdExist) {
+            array_push($this->fileContents["daily"]["users"], $currentUserData);
+
+            $this->fileContents["total"]["count"]++;
+        }
+
+        $this->fileContents["daily"]["users"] = array_values($this->fileContents["daily"]["users"]); // Reindex.
+
+        $this->dailyCount = count($this->fileContents["daily"]["users"]);
+        $this->totalCount = $this->fileContents["total"]["count"];
     }
 
     private function processNow()
     {
-        $clientIP = Utils::getClientIP();
-        $ipExist = false;
+        $clientIdExist = false;
         $currentTime = time();
         $expires = $currentTime + $this->expireTime;
 
         $currentUserData = array(
-            "ip" => $clientIP,
-            "expires" => $expires
+            "expires" => $expires,
+            "clientId" => $this->clientId,
+            "clientIp" => $this->clientIp
         );
 
         foreach ($this->fileContents["now"]["users"] as $user => $data) {
-            if ($data["ip"] == $clientIP) {
-                $ipExist = true;
-                $data["expires"] = $expires;
+            if ($data["clientId"] == $this->clientId) {
+                $clientIdExist = true;
+
                 $this->fileContents["now"]["users"][$user]["expires"] = $expires;
             } else if ($currentTime >= $data["expires"]) {
                 unset($this->fileContents["now"]["users"][$user]);
-                $this->fileContents["now"]["users"] = array_values($this->fileContents["now"]["users"]);
             }
         }
 
-        if (!$ipExist) {
+        if (!$clientIdExist) {
             array_push($this->fileContents["now"]["users"], $currentUserData);
         }
+
+        $this->fileContents["now"]["users"] = array_values($this->fileContents["now"]["users"]); // Reindex.
 
         $this->nowCount = count($this->fileContents["now"]["users"]);
     }
@@ -108,13 +128,17 @@ class Counter
         $data = array(
             "now" => array(
                 "users" => array(
-                    // "ip" => "CLIENT_IP",
-                    // "expires" => "SESSION_EXPIRE_TIME"
+                    // "expires" => "SESSION_EXPIRE_TIME",
+                    // "clientId" => "CLIENT_ID",
+                    // "clientIp" => "CLIENT_IP"
                 )
             ),
             "daily" => array(
                 "day" => intval(date("d")),
-                "count" => 0
+                "users" => array(
+                    // "sessionId" => "SESSION_ID",
+                    // "clientIp" => "CLIENT_IP"
+                )
             ),
             "total" => array(
                 "count" => 0

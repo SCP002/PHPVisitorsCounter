@@ -4,9 +4,10 @@
 # Not these files
 !/.gitattributes
 !/.gitignore
-!/index.php
+!/index.html
 !/README.md
 
 # Not these directories
 !/css
+!/js
 !/php
