@@ -17,5 +17,5 @@ div.counter {
 }
 
 div.counter span {
-    display: inline-block;
+    display: block;
 }

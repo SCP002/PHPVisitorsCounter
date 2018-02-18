@@ -26,9 +26,9 @@ NS_COUNTER.getSessionId = function () {
 };
 
 NS_COUNTER.displayCounterData = function (response) {
-    $('span.visitors-now').html(response['now']);
-    $('span.visitors-daily').html(response['daily']);
-    $('span.visitors-total').html(response['total']);
+    $('span.visitors-now').html('Now: ' + response['now']);
+    $('span.visitors-daily').html('Daily: ' + response['daily']);
+    $('span.visitors-total').html('Total: ' + response['total']);
 };
 
 NS_COUNTER.requestCounterData = function () {
