@@ -11,6 +11,7 @@ class Counter
 
     private $jsonWrapper = null;
     private $clientIp = null;
+    private $currentTime = null;
 
     private $clientId = null;
     private $sessionId = null;
@@ -25,6 +26,7 @@ class Counter
 
         $this->jsonWrapper = new JsonWrapper();
         $this->clientIp = Utils::getClientIpAddress();
+        $this->currentTime = time();
 
         $this->clientId = $clientId;
         $this->sessionId = $sessionId;
@@ -64,7 +66,9 @@ class Counter
         $currentDay = intval(date("d"));
 
         $currentUserData = array(
+            "visitTime" => $this->currentTime,
             "sessionId" => $this->sessionId,
+            "clientId" => $this->clientId,
             "clientIp" => $this->clientIp
         );
 
@@ -95,11 +99,12 @@ class Counter
     private function processNow()
     {
         $clientIdExist = false;
-        $currentTime = time();
-        $expires = $currentTime + $this->expireTime;
+        $expires = $this->currentTime + $this->expireTime;
 
         $currentUserData = array(
             "expires" => $expires,
+            "visitTime" => $this->currentTime,
+            "sessionId" => $this->sessionId,
             "clientId" => $this->clientId,
             "clientIp" => $this->clientIp
         );
@@ -109,7 +114,7 @@ class Counter
                 $clientIdExist = true;
 
                 $this->fileContents["now"]["users"][$user]["expires"] = $expires;
-            } else if ($currentTime >= $data["expires"]) {
+            } else if ($this->currentTime >= $data["expires"]) {
                 unset($this->fileContents["now"]["users"][$user]);
             }
         }
@@ -129,6 +134,8 @@ class Counter
             "now" => array(
                 "users" => array(
                     // "expires" => "SESSION_EXPIRE_TIME",
+                    // "visitTime" => "LAST_VISIT_TIME",
+                    // "sessionId" => "SESSION_ID",
                     // "clientId" => "CLIENT_ID",
                     // "clientIp" => "CLIENT_IP"
                 )
@@ -136,7 +143,9 @@ class Counter
             "daily" => array(
                 "day" => intval(date("d")),
                 "users" => array(
+                    // "visitTime" => "LAST_VISIT_TIME",
                     // "sessionId" => "SESSION_ID",
+                    // "clientId" => "CLIENT_ID",
                     // "clientIp" => "CLIENT_IP"
                 )
             ),
