@@ -26,12 +26,17 @@ NS_COUNTER.getSessionId = function () {
 };
 
 NS_COUNTER.displayCounterData = function (response) {
-    $('span.visitors-now').html('Now: ' + response['now']);
-    $('span.visitors-daily').html('Daily: ' + response['daily']);
-    $('span.visitors-total').html('Total: ' + response['total']);
+    if (typeof (response['now']) === 'object') {
+        // TODO: This.
+        window.console.log(response);
+    } else {
+        $('span.visitors-now').html('Now: ' + response['now']);
+        $('span.visitors-daily').html('Daily: ' + response['daily']);
+        $('span.visitors-total').html('Total: ' + response['total']);
+    }
 };
 
-NS_COUNTER.requestCounterData = function () {
+NS_COUNTER.requestCounterData = function (password) {
     $.ajax({
         url: './php/counter-ajax.php',
         method: 'POST',
@@ -39,7 +44,8 @@ NS_COUNTER.requestCounterData = function () {
         timeout: 10000,
         data: {
             'clientId': NS_COUNTER.getClientId(),
-            'sessionId': NS_COUNTER.getSessionId()
+            'sessionId': NS_COUNTER.getSessionId(),
+            'password': password
         },
         success: function (response) {
             NS_COUNTER.displayCounterData(response);
@@ -50,3 +56,10 @@ NS_COUNTER.requestCounterData = function () {
         }
     });
 };
+
+
+$('body').on('dblclick', 'div.counter', function () {
+    var password = window.prompt('Enter password');
+
+    NS_COUNTER.requestCounterData(password);
+});

@@ -60,6 +60,11 @@ class Counter
         return $this->nowCount;
     }
 
+    public function getJsonData()
+    {
+        return $this->fileContents;
+    }
+
     private function processDailyAndTotal()
     {
         $sessionIdExist = false;

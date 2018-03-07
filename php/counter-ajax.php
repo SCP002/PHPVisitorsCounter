@@ -3,6 +3,8 @@
 require_once "JsonWrapper.php";
 require_once "Counter.php";
 
+$password = "6312";
+
 $jsonWrapper = new JsonWrapper();
 
 $counter = new Counter(
@@ -13,10 +15,14 @@ $counter = new Counter(
     "Europe/Moscow"
 );
 
-$response = array(
-    "total" => $counter->getTotalCount(),
-    "daily" => $counter->getDailyCount(),
-    "now" => $counter->getNowCount()
-);
+if ($_POST["password"] == $password) {
+    $response = $counter->getJsonData();
+} else {
+    $response = array(
+        "total" => $counter->getTotalCount(),
+        "daily" => $counter->getDailyCount(),
+        "now" => $counter->getNowCount()
+    );
+}
 
 echo $jsonWrapper->encode($response);

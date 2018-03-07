@@ -1,3 +1,3 @@
 $(window).on('load', function () {
-    NS_COUNTER.requestCounterData();
+    NS_COUNTER.requestCounterData(null);
 });
