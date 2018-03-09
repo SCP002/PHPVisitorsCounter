@@ -3,13 +3,14 @@ body {
     padding: 0;
 }
 
+/* Counter */
 div.counter {
     background-color: #444444;
     border: 1px solid #000000;
     color: #ffffff;
     font-family: Monospaced, monospace;
     font-size: 20px;
-    height: 75px;
+    height: 88px;
     margin: 10px;
     padding-left: 5px;
     text-align: left;
@@ -19,3 +20,12 @@ div.counter {
 div.counter span {
     display: block;
 }
+
+/* /Counter */
+
+/* Modal */
+div.modal-body h4 {
+    text-align: center;
+}
+
+/* /Modal */

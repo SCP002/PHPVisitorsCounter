@@ -3,7 +3,7 @@
 require_once "JsonWrapper.php";
 require_once "Counter.php";
 
-$password = "6312";
+$password = "abcd";
 
 $jsonWrapper = new JsonWrapper();
 

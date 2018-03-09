@@ -8,6 +8,7 @@
 !/README.md
 
 # Not these directories
+!/bootstrap
 !/css
 !/js
 !/php

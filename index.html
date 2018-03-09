@@ -4,7 +4,14 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Visitors Counter</title>
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap-table.min.css">
+
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 
@@ -16,8 +23,80 @@
     <span class="visitors-total"></span>
 </div>
 
+<div id="modal-counter" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+                <h4 class="modal-title">
+                    Counter statistics
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <h4>Now:</h4>
+                <table id="table-counter-now">
+                    <thead>
+                    <tr>
+                        <th data-field="expires" data-sortable="true">
+                            Expires
+                        </th>
+                        <th data-field="visitTime" data-sortable="true">
+                            Visit time
+                        </th>
+                        <th data-field="sessionId" data-sortable="true">
+                            Session ID
+                        </th>
+                        <th data-field="clientId" data-sortable="true">
+                            Client ID
+                        </th>
+                        <th data-field="clientIp" data-sortable="true">
+                            Client IP
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+
+                <hr>
+
+                <h4>Daily:</h4>
+                <table id="table-counter-daily">
+                    <thead>
+                    <tr>
+                        <th data-field="visitTime" data-sortable="true">
+                            Visit time
+                        </th>
+                        <th data-field="sessionId" data-sortable="true">
+                            Session ID
+                        </th>
+                        <th data-field="clientId" data-sortable="true">
+                            Client ID
+                        </th>
+                        <th data-field="clientIp" data-sortable="true">
+                            Client IP
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="./js/lib/jquery.min.js"></script>
 <script src="./js/lib/store.legacy.min.js"></script>
+<script src="./bootstrap/js/bootstrap.min.js"></script>
+<script src="./bootstrap/js/bootstrap-table.min.js"></script>
 
 <script src="./js/counter-handler.js"></script>
 <script src="./js/load-handler.js"></script>

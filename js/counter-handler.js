@@ -1,5 +1,7 @@
 NS_COUNTER = {};
 
+NS_COUNTER.modalSelector = '#modal-counter';
+
 NS_COUNTER.getClientId = function () {
     // Not using window.localStorage due not full IE8 compatibility.
     var clientId = store.get('clientId');
@@ -27,8 +29,19 @@ NS_COUNTER.getSessionId = function () {
 
 NS_COUNTER.displayCounterData = function (response) {
     if (typeof (response['now']) === 'object') {
-        // TODO: This.
-        window.console.log(response);
+        $('#table-counter-now').bootstrapTable({
+            data: response['now']['users']
+        });
+
+        $('#table-counter-daily').bootstrapTable({
+            data: response['daily']['users']
+        });
+
+        $(NS_COUNTER.modalSelector).find('.modal-body')
+            .css('overflow-y', 'auto')
+            .css('max-height', $(window).height() * 0.7);
+
+        $(NS_COUNTER.modalSelector).modal();
     } else {
         $('span.visitors-now').html('Now: ' + response['now']);
         $('span.visitors-daily').html('Daily: ' + response['daily']);
@@ -36,6 +49,10 @@ NS_COUNTER.displayCounterData = function (response) {
     }
 };
 
+/**
+ * @param password Optional parameter. If null, get visitors count.
+ *                 Otherwise, if password is passed, get all counter file contents.
+ */
 NS_COUNTER.requestCounterData = function (password) {
     $.ajax({
         url: './php/counter-ajax.php',
