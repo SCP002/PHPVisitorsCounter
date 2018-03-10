@@ -24,8 +24,8 @@ div.counter span {
 /* /Counter */
 
 /* Modal */
-div.modal-body h4 {
-    text-align: center;
+div.modal-body p {
+    font-size: 14px;
 }
 
 /* /Modal */
