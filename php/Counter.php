@@ -85,6 +85,8 @@ class Counter
             foreach ($this->fileContents["daily"]["users"] as $user => $data) {
                 if ($data["sessionId"] == $this->sessionId) {
                     $sessionIdExist = true;
+
+                    $this->fileContents["daily"]["users"][$user] = $currentUserData;
                 }
             }
         }
@@ -118,7 +120,7 @@ class Counter
             if ($data["clientId"] == $this->clientId) {
                 $clientIdExist = true;
 
-                $this->fileContents["now"]["users"][$user]["expires"] = $expires;
+                $this->fileContents["now"]["users"][$user] = $currentUserData;
             } else if ($this->currentTime >= $data["expires"]) {
                 unset($this->fileContents["now"]["users"][$user]);
             }

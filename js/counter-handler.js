@@ -29,13 +29,13 @@ NS_COUNTER.getSessionId = function () {
 
 NS_COUNTER.displayCounterData = function (response) {
     if (typeof (response['now']) === 'object') {
-        $('#table-counter-now').bootstrapTable({
-            data: response['now']['users']
-        });
+        $('#table-counter-now')
+            .bootstrapTable()
+            .bootstrapTable('load', response['now']['users']);
 
-        $('#table-counter-daily').bootstrapTable({
-            data: response['daily']['users']
-        });
+        $('#table-counter-daily')
+            .bootstrapTable()
+            .bootstrapTable('load', response['daily']['users']);
 
         $(NS_COUNTER.modalSelector).find('.modal-body')
             .css('overflow-y', 'auto')
