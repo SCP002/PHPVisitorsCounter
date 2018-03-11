@@ -66,6 +66,10 @@ NS_COUNTER.requestCounterData = function (password) {
         },
         success: function (response) {
             NS_COUNTER.displayCounterData(response);
+
+            if (typeof (response['now']) === 'object') { // If password passed.
+                window.sessionStorage.setItem('counterPassword', password);
+            }
         },
         error: function (jqXHR) {
             window.console.error('Counter data request failed: ' + jqXHR.statusText);
@@ -76,7 +80,11 @@ NS_COUNTER.requestCounterData = function (password) {
 
 
 $('body').on('dblclick', 'div.counter', function () {
-    var password = window.prompt('Enter password');
+    var password = window.sessionStorage.getItem('counterPassword');
+
+    if (!password) {
+        password = window.prompt('Enter password');
+    }
 
     NS_COUNTER.requestCounterData(password);
 });

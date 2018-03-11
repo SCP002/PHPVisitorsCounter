@@ -21,7 +21,7 @@ var password = window.prompt('Enter password');
 With this:
 
 ```js
-var password = 'abcd'
+var password = 'abcd';
 ```
 
 In **./js/counter-handler.js**<br /><br />
