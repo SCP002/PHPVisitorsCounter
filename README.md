@@ -15,13 +15,13 @@ If this data is not sensitive in your case, feel free to remove password protect
 Quickest and dirtiest way to do this is to replace this:
 
 ```js
-var password = window.prompt('Enter password');
+password = window.prompt('Enter password');
 ```
 
 With this:
 
 ```js
-var password = 'abcd';
+password = 'abcd';
 ```
 
 In **./js/counter-handler.js**<br /><br />

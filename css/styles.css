@@ -25,7 +25,15 @@ div.counter span {
 
 /* Modal */
 div.modal-body p {
+    color: #333333;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
+    margin-bottom: 0;
+    margin-left: 2px;
+}
+
+div.modal-body .bootstrap-table .search {
+    float: left !important;
 }
 
 /* /Modal */

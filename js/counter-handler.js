@@ -1,6 +1,10 @@
 NS_COUNTER = {};
 
+NS_COUNTER.tableNowSelector = '#table-counter-now';
+NS_COUNTER.tableDailySelector = '#table-counter-daily';
+NS_COUNTER.refreshSelector = '#btn-counter-refresh';
 NS_COUNTER.modalSelector = '#modal-counter';
+NS_COUNTER.divSelector = 'div.counter';
 
 NS_COUNTER.getClientId = function () {
     // Not using window.localStorage due not full IE8 compatibility.
@@ -29,13 +33,9 @@ NS_COUNTER.getSessionId = function () {
 
 NS_COUNTER.displayCounterData = function (response) {
     if (typeof (response['now']) === 'object') {
-        $('#table-counter-now')
-            .bootstrapTable()
-            .bootstrapTable('load', response['now']['users']);
+        $(NS_COUNTER.tableNowSelector).bootstrapTable('load', response['now']['users']);
 
-        $('#table-counter-daily')
-            .bootstrapTable()
-            .bootstrapTable('load', response['daily']['users']);
+        $(NS_COUNTER.tableDailySelector).bootstrapTable('load', response['daily']['users']);
 
         $(NS_COUNTER.modalSelector).find('.modal-body')
             .css('overflow-y', 'auto')
@@ -50,10 +50,21 @@ NS_COUNTER.displayCounterData = function (response) {
 };
 
 /**
- * @param password Optional parameter. If null, get visitors count.
- *                 Otherwise, if password is passed, get all counter file contents.
+ * @param getFullData If false, just get visitors count as numbers.
+ *                    If true, then ask for a password and send it to the server.
+ *                    Then, if password is passed, get response (object) with all counter file contents.
  */
-NS_COUNTER.requestCounterData = function (password) {
+NS_COUNTER.requestCounterData = function (getFullData) {
+    var password = null;
+
+    if (getFullData) {
+        password = window.sessionStorage.getItem('counterPassword');
+
+        if (!password) {
+            password = window.prompt('Enter password');
+        }
+    }
+
     $.ajax({
         url: './php/counter-ajax.php',
         method: 'POST',
@@ -79,12 +90,8 @@ NS_COUNTER.requestCounterData = function (password) {
 };
 
 
-$('body').on('dblclick', 'div.counter', function () {
-    var password = window.sessionStorage.getItem('counterPassword');
-
-    if (!password) {
-        password = window.prompt('Enter password');
-    }
-
-    NS_COUNTER.requestCounterData(password);
+$('body').on('dblclick', NS_COUNTER.divSelector, function () {
+    NS_COUNTER.requestCounterData(true);
+}).on('click', NS_COUNTER.refreshSelector, function () {
+    NS_COUNTER.requestCounterData(true);
 });

@@ -41,12 +41,7 @@
                 <p>
                     <b>Now:</b>
                 </p>
-                <table id="table-counter-now"
-                       data-toggle="table"
-                       data-search="true"
-                       data-show-refresh="true"
-                       data-show-toggle="true"
-                       data-show-columns="true">
+                <table id="table-counter-now" data-toggle="table" data-search="true">
                     <thead>
                     <tr>
                         <th data-field="expires" data-sortable="true">
@@ -73,12 +68,7 @@
                 <p>
                     <b>Daily:</b>
                 </p>
-                <table id="table-counter-daily"
-                       data-toggle="table"
-                       data-search="true"
-                       data-show-refresh="true"
-                       data-show-toggle="true"
-                       data-show-columns="true">
+                <table id="table-counter-daily" data-toggle="table" data-search="true">
                     <thead>
                     <tr>
                         <th data-field="visitTime" data-sortable="true">
@@ -101,6 +91,9 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     Close
+                </button>
+                <button id="btn-counter-refresh" type="button" class="btn btn-primary">
+                    Refresh
                 </button>
             </div>
         </div>
