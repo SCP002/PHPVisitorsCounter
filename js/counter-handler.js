@@ -31,16 +31,32 @@ NS_COUNTER.getSessionId = function () {
     return sessionId;
 };
 
+NS_COUNTER.highlightClientRows = function (tableSelector, userData) {
+    var clientIdCellIndex = Object.keys(userData).indexOf('clientId');
+
+    $(tableSelector).find('tbody tr td').each(function () {
+        if (this.cellIndex === clientIdCellIndex && this.innerHTML === NS_COUNTER.getClientId()) {
+            $(this).parent().css('background-color', '#dcf4ff');
+        }
+    });
+};
+
 NS_COUNTER.displayCounterData = function (response) {
     if (typeof (response['now']) === 'object') {
+        // Load data to tables.
         $(NS_COUNTER.tableNowSelector).bootstrapTable('load', response['now']['users']);
-
         $(NS_COUNTER.tableDailySelector).bootstrapTable('load', response['daily']['users']);
 
+        // Highlight rows with current client ID.
+        NS_COUNTER.highlightClientRows(NS_COUNTER.tableNowSelector, response['now']['users'][0]);
+        NS_COUNTER.highlightClientRows(NS_COUNTER.tableDailySelector, response['daily']['users'][0]);
+
+        // Set modal height.
         $(NS_COUNTER.modalSelector).find('.modal-body')
             .css('overflow-y', 'auto')
-            .css('max-height', $(window).height() * 0.7);
+            .css('max-height', $(window).height() * 0.75);
 
+        // Show modal.
         $(NS_COUNTER.modalSelector).modal();
     } else {
         $('span.visitors-now').html('Now: ' + response['now']);
