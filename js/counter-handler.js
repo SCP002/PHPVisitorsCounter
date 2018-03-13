@@ -41,11 +41,27 @@ NS_COUNTER.highlightClientRows = function (tableSelector, userData) {
     });
 };
 
+NS_COUNTER.unixTimeToFormatStr = function (users, fields) {
+    users.forEach(function (user, index) {
+        fields.forEach(function (field) {
+            var date = new Date(user[field] * 1000);
+
+            users[index][field] = date.toLocaleTimeString('en-GB');
+        });
+    });
+
+    return users;
+};
+
 NS_COUNTER.displayCounterData = function (response) {
     if (typeof (response['now']) === 'object') {
+        // Convert unix timestamps to readable form.
+        var nowUsers = NS_COUNTER.unixTimeToFormatStr(response['now']['users'], ['expires', 'visitTime']);
+        var dailyUsers = NS_COUNTER.unixTimeToFormatStr(response['daily']['users'], ['visitTime']);
+
         // Load data to tables.
-        $(NS_COUNTER.tableNowSelector).bootstrapTable('load', response['now']['users']);
-        $(NS_COUNTER.tableDailySelector).bootstrapTable('load', response['daily']['users']);
+        $(NS_COUNTER.tableNowSelector).bootstrapTable('load', nowUsers);
+        $(NS_COUNTER.tableDailySelector).bootstrapTable('load', dailyUsers);
 
         // Highlight rows with current client ID.
         NS_COUNTER.highlightClientRows(NS_COUNTER.tableNowSelector, response['now']['users'][0]);
