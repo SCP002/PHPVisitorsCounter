@@ -1,5 +1,6 @@
 <?php
 
+require_once "lib/BrowserDetection.php";
 require_once "JsonWrapper.php";
 require_once "Utils.php";
 
@@ -9,9 +10,14 @@ class Counter
     private $dailyCount = null;
     private $nowCount = null;
 
-    private $jsonWrapper = null;
-    private $clientIp = null;
     private $currentTime = null;
+
+    private $browser = null;
+    private $jsonWrapper = null;
+
+    private $clientIp = null;
+    private $clientBrowser = null;
+    private $clientOs = null;
 
     private $clientId = null;
     private $sessionId = null;
@@ -24,9 +30,15 @@ class Counter
     {
         date_default_timezone_set($timezoneIdentifier);
 
-        $this->jsonWrapper = new JsonWrapper();
-        $this->clientIp = Utils::getClientIpAddress();
         $this->currentTime = time();
+
+        $this->browser = new BrowserDetection();
+        $this->jsonWrapper = new JsonWrapper();
+
+        $this->clientIp = Utils::getClientIpAddress();
+        $this->clientBrowser = $this->browser->getName() . " " . $this->browser->getVersion();
+        $this->clientOs = $this->browser->getPlatformVersion();
+        $this->clientOs = ($this->browser->isMobile()) ? $this->clientOs . "; Mobile" : $this->clientOs . "; Desktop";
 
         $this->clientId = $clientId;
         $this->sessionId = $sessionId;
@@ -74,7 +86,9 @@ class Counter
             "visitTime" => $this->currentTime,
             "sessionId" => $this->sessionId,
             "clientId" => $this->clientId,
-            "clientIp" => $this->clientIp
+            "clientIp" => $this->clientIp,
+            "clientBrowser" => $this->clientBrowser,
+            "clientOs" => $this->clientOs
         );
 
         if ($this->fileContents["daily"]["day"] != $currentDay) {
@@ -113,7 +127,9 @@ class Counter
             "visitTime" => $this->currentTime,
             "sessionId" => $this->sessionId,
             "clientId" => $this->clientId,
-            "clientIp" => $this->clientIp
+            "clientIp" => $this->clientIp,
+            "clientBrowser" => $this->clientBrowser,
+            "clientOs" => $this->clientOs
         );
 
         foreach ($this->fileContents["now"]["users"] as $user => $data) {
@@ -144,7 +160,9 @@ class Counter
                     // "visitTime" => "LAST_VISIT_TIME",
                     // "sessionId" => "SESSION_ID",
                     // "clientId" => "CLIENT_ID",
-                    // "clientIp" => "CLIENT_IP"
+                    // "clientIp" => "CLIENT_IP",
+                    // "clientBrowser" => "CLIENT_BROWSER",
+                    // "clientOs" => "CLIENT_OS"
                 )
             ),
             "daily" => array(
@@ -153,7 +171,9 @@ class Counter
                     // "visitTime" => "LAST_VISIT_TIME",
                     // "sessionId" => "SESSION_ID",
                     // "clientId" => "CLIENT_ID",
-                    // "clientIp" => "CLIENT_IP"
+                    // "clientIp" => "CLIENT_IP",
+                    // "clientBrowser" => "CLIENT_BROWSER",
+                    // "clientOs" => "CLIENT_OS"
                 )
             ),
             "total" => array(

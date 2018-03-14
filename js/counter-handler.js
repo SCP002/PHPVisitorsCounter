@@ -5,6 +5,7 @@ NS_COUNTER.tableDailySelector = '#table-counter-daily';
 NS_COUNTER.refreshSelector = '#btn-counter-refresh';
 NS_COUNTER.modalSelector = '#modal-counter';
 NS_COUNTER.divSelector = 'div.counter';
+NS_COUNTER.bodyElement = $('body');
 
 NS_COUNTER.getClientId = function () {
     // Not using window.localStorage due not full IE8 compatibility.
@@ -67,11 +68,6 @@ NS_COUNTER.displayCounterData = function (response) {
         NS_COUNTER.highlightClientRows(NS_COUNTER.tableNowSelector, response['now']['users'][0]);
         NS_COUNTER.highlightClientRows(NS_COUNTER.tableDailySelector, response['daily']['users'][0]);
 
-        // Set modal height.
-        $(NS_COUNTER.modalSelector).find('.modal-body')
-            .css('overflow-y', 'auto')
-            .css('max-height', $(window).height() * 0.75);
-
         // Show modal.
         $(NS_COUNTER.modalSelector).modal();
     } else {
@@ -122,8 +118,17 @@ NS_COUNTER.requestCounterData = function (getFullData) {
 };
 
 
-$('body').on('dblclick', NS_COUNTER.divSelector, function () {
+NS_COUNTER.bodyElement.on('dblclick', NS_COUNTER.divSelector, function () {
     NS_COUNTER.requestCounterData(true);
-}).on('click', NS_COUNTER.refreshSelector, function () {
+});
+
+NS_COUNTER.bodyElement.on('click', NS_COUNTER.refreshSelector, function () {
     NS_COUNTER.requestCounterData(true);
+});
+
+NS_COUNTER.bodyElement.on('show.bs.modal', NS_COUNTER.modalSelector, function () {
+    $(this).find('.modal-body').css({
+        'overflow-y': 'auto',
+        'max-height': $(window).height() * 0.75
+    });
 });
