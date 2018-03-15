@@ -32,8 +32,16 @@ NS_COUNTER.getSessionId = function () {
     return sessionId;
 };
 
-NS_COUNTER.highlightClientRows = function (tableSelector, userData) {
-    var clientIdCellIndex = Object.keys(userData).indexOf('clientId');
+NS_COUNTER.highlightClientRows = function (tableSelector) {
+    var clientIdCellIndex = null;
+
+    $(tableSelector).find('thead tr th').each(function () {
+        if (this.dataset.field === 'clientId') {
+            clientIdCellIndex = this.cellIndex;
+
+            return false;
+        }
+    });
 
     $(tableSelector).find('tbody tr td').each(function () {
         if (this.cellIndex === clientIdCellIndex && this.innerHTML === NS_COUNTER.getClientId()) {
@@ -65,8 +73,8 @@ NS_COUNTER.displayCounterData = function (response) {
         $(NS_COUNTER.tableDailySelector).bootstrapTable('load', dailyUsers);
 
         // Highlight rows with current client ID.
-        NS_COUNTER.highlightClientRows(NS_COUNTER.tableNowSelector, response['now']['users'][0]);
-        NS_COUNTER.highlightClientRows(NS_COUNTER.tableDailySelector, response['daily']['users'][0]);
+        NS_COUNTER.highlightClientRows(NS_COUNTER.tableNowSelector);
+        NS_COUNTER.highlightClientRows(NS_COUNTER.tableDailySelector);
 
         // Show modal.
         $(NS_COUNTER.modalSelector).modal();
@@ -131,4 +139,8 @@ NS_COUNTER.bodyElement.on('show.bs.modal', NS_COUNTER.modalSelector, function ()
         'overflow-y': 'auto',
         'max-height': $(window).height() * 0.75
     });
+});
+
+NS_COUNTER.bodyElement.on('search.bs.table', NS_COUNTER.modalSelector + ' table', function () {
+    NS_COUNTER.highlightClientRows('#' + this.id);
 });
