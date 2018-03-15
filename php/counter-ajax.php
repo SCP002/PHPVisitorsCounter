@@ -12,7 +12,7 @@ $counter = new Counter(
     $_POST["sessionId"],
     60 * 3,
     "../visitors-counter.json",
-    "Europe/Moscow"
+    "Europe/Minsk"
 );
 
 if ($_POST["password"] == $password) {
