@@ -10,6 +10,7 @@ $jsonWrapper = new JsonWrapper();
 $counter = new Counter(
     $_POST["clientId"],
     $_POST["sessionId"],
+    $_POST["lastUrl"],
     60 * 3,
     "../visitors-counter.json",
     "Europe/Minsk"

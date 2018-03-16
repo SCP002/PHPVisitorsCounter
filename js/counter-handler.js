@@ -102,6 +102,7 @@ NS_COUNTER.requestCounterData = function (getFullData) {
         data: {
             'clientId': NS_COUNTER.getClientId(),
             'sessionId': NS_COUNTER.getSessionId(),
+            'lastUrl': window.location.href,
             'password': password
         },
         success: function (response) {

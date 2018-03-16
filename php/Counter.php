@@ -21,12 +21,13 @@ class Counter
 
     private $clientId = null;
     private $sessionId = null;
+    private $lastUrl = null;
     private $expireTime = null;
     private $fileName = null;
 
     private $fileContents = null;
 
-    public function __construct($clientId, $sessionId, $expireTime, $fileName, $timezoneIdentifier)
+    public function __construct($clientId, $sessionId, $lastUrl, $expireTime, $fileName, $timezoneIdentifier)
     {
         date_default_timezone_set($timezoneIdentifier);
 
@@ -47,6 +48,7 @@ class Counter
 
         $this->clientId = $clientId;
         $this->sessionId = $sessionId;
+        $this->lastUrl = $lastUrl;
         $this->expireTime = $expireTime;
         $this->fileName = $fileName;
 
@@ -93,7 +95,8 @@ class Counter
             "clientId" => $this->clientId,
             "clientIp" => $this->clientIp,
             "clientBrowser" => $this->clientBrowser,
-            "clientOs" => $this->clientOs
+            "clientOs" => $this->clientOs,
+            "lastUrl" => $this->lastUrl
         );
 
         if ($this->fileContents["daily"]["day"] != $currentDay) {
@@ -134,7 +137,8 @@ class Counter
             "clientId" => $this->clientId,
             "clientIp" => $this->clientIp,
             "clientBrowser" => $this->clientBrowser,
-            "clientOs" => $this->clientOs
+            "clientOs" => $this->clientOs,
+            "lastUrl" => $this->lastUrl
         );
 
         foreach ($this->fileContents["now"]["users"] as $user => $data) {
@@ -167,7 +171,8 @@ class Counter
                     // "clientId" => "CLIENT_ID",
                     // "clientIp" => "CLIENT_IP",
                     // "clientBrowser" => "CLIENT_BROWSER",
-                    // "clientOs" => "CLIENT_OS"
+                    // "clientOs" => "CLIENT_OS",
+                    // "lastUrl" => "CLIENT_ADDRESS_BAR_STRING"
                 )
             ),
             "daily" => array(
@@ -178,7 +183,8 @@ class Counter
                     // "clientId" => "CLIENT_ID",
                     // "clientIp" => "CLIENT_IP",
                     // "clientBrowser" => "CLIENT_BROWSER",
-                    // "clientOs" => "CLIENT_OS"
+                    // "clientOs" => "CLIENT_OS",
+                    // "lastUrl" => "CLIENT_ADDRESS_BAR_STRING"
                 )
             ),
             "total" => array(
