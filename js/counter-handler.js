@@ -64,19 +64,12 @@ NS_COUNTER.unixTimeToFormatStr = function (users, fields) {
 
 NS_COUNTER.displayCounterData = function (response) {
     if (typeof (response['now']) === 'object') {
-        // Convert unix timestamps to readable form.
         var nowUsers = NS_COUNTER.unixTimeToFormatStr(response['now']['users'], ['expires', 'visitTime']);
         var dailyUsers = NS_COUNTER.unixTimeToFormatStr(response['daily']['users'], ['visitTime']);
 
-        // Load data to tables.
         $(NS_COUNTER.tableNowSelector).bootstrapTable('load', nowUsers);
         $(NS_COUNTER.tableDailySelector).bootstrapTable('load', dailyUsers);
 
-        // Highlight rows with current client ID.
-        NS_COUNTER.highlightClientRows(NS_COUNTER.tableNowSelector);
-        NS_COUNTER.highlightClientRows(NS_COUNTER.tableDailySelector);
-
-        // Show modal.
         $(NS_COUNTER.modalSelector).modal();
     } else {
         $('span.visitors-now').html('Now: ' + response['now']);
@@ -141,6 +134,6 @@ NS_COUNTER.bodyElement.on('show.bs.modal', NS_COUNTER.modalSelector, function ()
     });
 });
 
-NS_COUNTER.bodyElement.on('search.bs.table', NS_COUNTER.modalSelector + ' table', function () {
+NS_COUNTER.bodyElement.on('post-body.bs.table', NS_COUNTER.modalSelector + ' table', function () {
     NS_COUNTER.highlightClientRows('#' + this.id);
 });
