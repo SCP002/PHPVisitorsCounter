@@ -38,6 +38,11 @@ class Counter
         $this->clientIp = Utils::getClientIpAddress();
         $this->clientBrowser = $this->browser->getName() . " " . $this->browser->getVersion();
         $this->clientOs = $this->browser->getPlatformVersion();
+
+        if ($this->clientOs == BrowserDetection::PLATFORM_VERSION_UNKNOWN) {
+            $this->clientOs = $this->browser->getPlatform() . " " . $this->browser->getPlatformVersion(true);
+        }
+
         $this->clientOs = ($this->browser->isMobile()) ? $this->clientOs . "; Mobile" : $this->clientOs . "; Desktop";
 
         $this->clientId = $clientId;
