@@ -46,13 +46,14 @@
                        data-search="true"
                        data-show-columns="true"
                        data-search-align="left"
-                       data-buttons-align="left">
+                       data-buttons-align="left"
+                       data-row-style="NS_COUNTER.rowStyle">
                     <thead>
                     <tr>
-                        <th data-field="expires" data-sortable="true">
+                        <th data-field="expires" data-sortable="true" data-formatter="NS_COUNTER.timeFormatter">
                             Expires
                         </th>
-                        <th data-field="visitTime" data-sortable="true">
+                        <th data-field="visitTime" data-sortable="true" data-formatter="NS_COUNTER.timeFormatter">
                             Visit time
                         </th>
                         <th data-field="sessionId" data-sortable="true">
@@ -70,7 +71,7 @@
                         <th data-field="clientOs" data-sortable="true">
                             OS
                         </th>
-                        <th data-field="lastUrl" data-sortable="true">
+                        <th data-field="lastUrl" data-sortable="true" data-formatter="NS_COUNTER.urlFormatter">
                             Last URL
                         </th>
                     </tr>
@@ -87,10 +88,11 @@
                        data-search="true"
                        data-show-columns="true"
                        data-search-align="left"
-                       data-buttons-align="left">
+                       data-buttons-align="left"
+                       data-row-style="NS_COUNTER.rowStyle">
                     <thead>
                     <tr>
-                        <th data-field="visitTime" data-sortable="true">
+                        <th data-field="visitTime" data-sortable="true" data-formatter="NS_COUNTER.timeFormatter">
                             Visit time
                         </th>
                         <th data-field="sessionId" data-sortable="true">
@@ -108,7 +110,7 @@
                         <th data-field="clientOs" data-sortable="true">
                             OS
                         </th>
-                        <th data-field="lastUrl" data-sortable="true">
+                        <th data-field="lastUrl" data-sortable="true" data-formatter="NS_COUNTER.urlFormatter">
                             Last URL
                         </th>
                     </tr>

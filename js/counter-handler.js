@@ -1,10 +1,6 @@
 NS_COUNTER = {};
 
-NS_COUNTER.tableNowSelector = '#table-counter-now';
-NS_COUNTER.tableDailySelector = '#table-counter-daily';
-NS_COUNTER.refreshSelector = '#btn-counter-refresh';
 NS_COUNTER.modalSelector = '#modal-counter';
-NS_COUNTER.divSelector = 'div.counter';
 NS_COUNTER.bodyElement = $('body');
 
 NS_COUNTER.getClientId = function () {
@@ -32,43 +28,10 @@ NS_COUNTER.getSessionId = function () {
     return sessionId;
 };
 
-NS_COUNTER.highlightClientRows = function (tableSelector) {
-    var clientIdCellIndex = null;
-
-    $(tableSelector).find('thead tr th').each(function () {
-        if (this.dataset.field === 'clientId') {
-            clientIdCellIndex = this.cellIndex;
-
-            return false;
-        }
-    });
-
-    $(tableSelector).find('tbody tr td').each(function () {
-        if (this.cellIndex === clientIdCellIndex && this.innerHTML === NS_COUNTER.getClientId()) {
-            $(this).parent().css('background-color', '#dcf4ff');
-        }
-    });
-};
-
-NS_COUNTER.unixTimeToFormatStr = function (users, fields) {
-    users.forEach(function (user, index) {
-        fields.forEach(function (field) {
-            var date = new Date(user[field] * 1000);
-
-            users[index][field] = date.toLocaleTimeString('en-GB');
-        });
-    });
-
-    return users;
-};
-
 NS_COUNTER.displayCounterData = function (response) {
     if (typeof (response['now']) === 'object') {
-        var nowUsers = NS_COUNTER.unixTimeToFormatStr(response['now']['users'], ['expires', 'visitTime']);
-        var dailyUsers = NS_COUNTER.unixTimeToFormatStr(response['daily']['users'], ['visitTime']);
-
-        $(NS_COUNTER.tableNowSelector).bootstrapTable('load', nowUsers);
-        $(NS_COUNTER.tableDailySelector).bootstrapTable('load', dailyUsers);
+        $('#table-counter-now').bootstrapTable('load', response['now']['users']);
+        $('#table-counter-daily').bootstrapTable('load', response['daily']['users']);
 
         $(NS_COUNTER.modalSelector).modal();
     } else {
@@ -119,12 +82,30 @@ NS_COUNTER.requestCounterData = function (getFullData) {
     });
 };
 
+NS_COUNTER.urlFormatter = function (value) {
+    return '<a href="' + value + '">' + value + '</a>';
+};
 
-NS_COUNTER.bodyElement.on('dblclick', NS_COUNTER.divSelector, function () {
+NS_COUNTER.timeFormatter = function (value) {
+    return new Date(value * 1000).toLocaleTimeString('en-GB');
+};
+
+NS_COUNTER.rowStyle = function (row) {
+    if (row['clientId'] === NS_COUNTER.getClientId()) {
+        return {
+            classes: ['info']
+        };
+    }
+
+    return {};
+};
+
+
+NS_COUNTER.bodyElement.on('dblclick', 'div.counter', function () {
     NS_COUNTER.requestCounterData(true);
 });
 
-NS_COUNTER.bodyElement.on('click', NS_COUNTER.refreshSelector, function () {
+NS_COUNTER.bodyElement.on('click', '#btn-counter-refresh', function () {
     NS_COUNTER.requestCounterData(true);
 });
 
@@ -133,8 +114,4 @@ NS_COUNTER.bodyElement.on('show.bs.modal', NS_COUNTER.modalSelector, function ()
         'overflow-y': 'auto',
         'max-height': $(window).height() * 0.75
     });
-});
-
-NS_COUNTER.bodyElement.on('post-body.bs.table', NS_COUNTER.modalSelector + ' table', function () {
-    NS_COUNTER.highlightClientRows('#' + this.id);
 });
