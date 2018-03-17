@@ -35,52 +35,42 @@ Counter will store JSON file on your host machine, which has following format:<b
   "now": {
     "users": [
       {
-        "expires": 1520589777,
-        "visitTime": 1520589585,
-        "sessionId": "ilqigc4zr",
-        "clientId": "1p7snurgv",
-        "clientIp": "192.168.0.5"
-      },
-      {
-        "expires": 1520589849,
-        "visitTime": 1520589615,
-        "sessionId": "hwov4patq",
-        "clientId": "nhd85ndxs",
-        "clientIp": "192.168.0.6"
+        "expires": 1521313987,
+        "visitTime": 1521313807,
+        "sessionId": "gx0f6ob9p",
+        "clientId": "ghjo3b704",
+        "clientIp": "192.168.0.4",
+        "clientBrowser": "Internet Explorer 11.0",
+        "clientOs": "Windows 7; Desktop",
+        "lastUrl": "http:\/\/192.168.0.2\/"
       }
     ]
   },
   "daily": {
-    "day": 9,
+    "day": 17,
     "users": [
       {
-        "visitTime": 1520589585,
-        "sessionId": "ilqigc4zr",
-        "clientId": "1p7snurgv",
-        "clientIp": "192.168.0.5"
+        "visitTime": 1521313789,
+        "sessionId": "d00ocqpya",
+        "clientId": "q09rpdwt7",
+        "clientIp": "192.168.0.3",
+        "clientBrowser": "Firefox 55.0",
+        "clientOs": "Windows 8.1; Desktop",
+        "lastUrl": "http:\/\/192.168.0.2\/?test=12345"
       },
       {
-        "visitTime": 1520589595,
-        "sessionId": "o7iukkj0w",
-        "clientId": "1p7snurgv",
-        "clientIp": "192.168.0.5"
-      },
-      {
-        "visitTime": 1520589615,
-        "sessionId": "hwov4patq",
-        "clientId": "nhd85ndxs",
-        "clientIp": "192.168.0.6"
-      },
-      {
-        "visitTime": 1520589667,
-        "sessionId": "f5sf9knza",
-        "clientId": "nhd85ndxs",
-        "clientIp": "192.168.0.6"
+        "visitTime": 1521313807,
+        "sessionId": "gx0f6ob9p",
+        "clientId": "ghjo3b704",
+        "clientIp": "192.168.0.4",
+        "clientBrowser": "Internet Explorer 11.0",
+        "clientOs": "Windows 7; Desktop",
+        "lastUrl": "http:\/\/192.168.2\/"
       }
     ]
   },
   "total": {
-    "count": 9
+    "count": 6
   }
 }
 ```
