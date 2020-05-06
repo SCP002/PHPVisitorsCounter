@@ -58,6 +58,8 @@ class Counter
 
         $this->fileContents = $this->jsonWrapper->decode(file_get_contents($this->fileName), true);
 
+        $this->validate();
+
         $this->processDailyAndTotal();
         $this->processNow();
 
@@ -193,5 +195,37 @@ class Counter
         );
 
         file_put_contents($this->fileName, $this->jsonWrapper->encode($data));
+    }
+
+    // Bug fix, encoutnered on Debian 3.16.36 with PHP 5.4.45-0+deb7u2:
+    // If counter file path is ~, ["now"]["users"] becomes null.
+    private function validate()
+    {
+        // Now
+        if (!is_array($this->fileContents["now"])) {
+            $this->fileContents["now"] = array();
+        }
+        if (!is_array($this->fileContents["now"]["users"])) {
+            $this->fileContents["now"]["users"] = array();
+        }
+
+        // Daily
+        if (!is_array($this->fileContents["daily"])) {
+            $this->fileContents["daily"] = array();
+        }
+        if (!is_int($this->fileContents["daily"]["day"])) {
+            $this->fileContents["daily"]["day"] = intval(date("d"));
+        }
+        if (!is_array($this->fileContents["daily"]["users"])) {
+            $this->fileContents["daily"]["users"] = array();
+        }
+
+        // Total
+        if (!is_array($this->fileContents["total"])) {
+            $this->fileContents["total"] = array();
+        }
+        if (!is_int($this->fileContents["total"]["count"])) {
+            $this->fileContents["total"]["count"] = 0;
+        }
     }
 }
